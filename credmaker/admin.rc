@@ -1,0 +1,7 @@
+export OS_AUTH_URL=don't know
+export OS_IDENTITY_API_VERSION=3
+export OS_PROJECT_NAME=gaurav
+export OS_PROJECT_DOMAIN_NAME=www.gaurav.com
+export OS_USERNAME=gbanja
+export OS_USER_DOMAIN_NAME=.com
+export OS_PASSWORD=123
