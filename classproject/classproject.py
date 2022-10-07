@@ -1,31 +1,21 @@
-#!/usr/bin/env python3
 """Himalayan Research | GBanjade
    Tic Tac Toe Game with AI"""
 
-# Standard libraries
 import random
 import os
 import time
 
 
-# Function to clear the board
-# Clears the visual display of
-# previous play of the Tic Tac Toe and displays the updated board
-# The new board will stack on top of each play if the clear
-# function is not called first on diplay_board method
-
 def clear():
-    """ Clears the board"""
+    """Clear the board after player makes a move"""
     os.system('clear')
 
 
-# Displays the nicely formatted Tic Tac Toe board layout
-
 def display_baord(board):
-    """ Diplays the board"""
+    """Displays nicely formatted Tic Tac Toe Board"""
     clear()
-    print("TIC TAC TOE with AI")
-    print("-------------------\n")
+    print("TIC TAC TOE game with AI")
+    print("------------------------\n\n")
     print('   |   |')
     print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
     print('   |   |')
@@ -38,29 +28,29 @@ def display_baord(board):
     print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
     print('   |   |')
 
-# Allows human player to choose a marker
-def human_marker_selection():
-    """ Human marker selection function"""
+
+def human__selection():
+    """Allows human to choose a marker """
     marker = ''
 
     while not (marker == 'X' or marker == 'O'):
-        marker = input('Human: Do you want to be X or O? ').upper()
+        marker = input('Human: Do you want to be X or O? \n\n').upper()
     # Returns a tuples, tuples unpacking is done to identify the
     # marker for the Human  and AI
     if marker == 'X':
         return ('X', 'O')
-    else:
-        return ('O', 'X')
 
-# Places the marker on the desired postion of the board
+    return ('O', 'X')
+
+
 def place_marker(board, marker, position):
-    """Marker position on the board"""
+    """Places the marker on the desired position of the board """
     board[position] = marker
 
-# Checks if AI or Human has won
-# Returns True if any of the player has won the game
+
 def win_check(board, mark):
-    """Checks for winner"""
+    """Checks if AI or Human has won
+    Returns True if any of the player has won the game"""
 
     return ((board[7] == mark and board[8] == mark and board[9] == mark) or  # across the top
             # across the middle
@@ -77,61 +67,60 @@ def win_check(board, mark):
             (board[7] == mark and board[5] == mark and board[3] == mark) or
             (board[9] == mark and board[5] == mark and board[1] == mark))  # diagonal
 
-# Decides randomly on which player goes first
+
 def choose_first():
-    """Randomly chooses who goes first"""
+    """Decides randomly on which player goes first"""
     if random.randint(0, 1) == 0:
         return 'AI'
-    else:
-        return 'Human'
+    return 'Human'
 
-# Checks if the board position is available, returns boolean depending on the avaibility
+
 def space_check(board, position):
-    """Checks for empty space"""
+    """Checks if the position is available,
+    returns boolean"""
     return board[position] == ' '
 
-# Checks the board is full and returns a boolean value
+
 def full_board_check(board):
-    """Checks all the spaces on board"""
+    """Checks if the board is full"""
     for i in range(1, 10):
         if space_check(board, i):
             return False
     return True
 
-# Allows a human player to seclect a position from (1-9)
+
 def human_choice(board):
-    """Allows human to pick a position"""
+    """Allows human to select a position from (1-9)"""
     position = 0
 
     while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(board, position):
-        # Making sure the human gives the integer
+        # Making sure the human gives the int
         try:
-            position = int(input(f'\nChoose position: (1-9)'))
+            position = int(input('\nChoose position: (1-9)'))
         except ValueError:
             print("Not an integer! Try again.")
             continue
-
     return position
 
-# AI will choose a position based on the coded algorithm
+
 def ai_choice(board):
-    """Allows AI to choose a position"""
+    """AI will choose a position base on the algorithm"""
     position = 0
     while position not in [1, 2, 3, 4, 5, 6, 7, 8, 9] or not space_check(board, position):
         # Check for a winning position and if found, select that position
         for i in range(1, 10):
             copy_of_board = board.copy()
             if space_check(copy_of_board, i):
-                place_marker(copy_of_board, AI_marker, i)
-                if win_check(copy_of_board, AI_marker):
+                place_marker(copy_of_board, AI_MARKER, i)
+                if win_check(copy_of_board, AI_MARKER):
                     return i
 
         # Check if the human can win game on the next move
         for i in range(1, 10):
             copy_of_board = board.copy()
             if space_check(copy_of_board, i):
-                place_marker(copy_of_board, human_marker, i)
-                if win_check(copy_of_board, human_marker):
+                place_marker(copy_of_board, HUMAN_MARKER, i)
+                if win_check(copy_of_board, HUMAN_MARKER):
                     return i
 
         # Try to take the corners if free
@@ -150,14 +139,13 @@ def ai_choice(board):
         return random.choice(remaining_choice)
 
 
-# Allows to play the game again
 def replay():
     """Gives option to play game again"""
     return input('Do you want to play again? Enter Yes or No: ').lower().startswith('y')
 
-def main():
-    """runtime code"""
 
+def main():
+    """Runtime code"""
     print("Welcome to Tic Tac Toe Game with AI\n\n")
 
     # While loop to keep the game running
@@ -166,16 +154,18 @@ def main():
         # Creating a board to play a game
         the_board = [' '] * 10
 
+        # Defining global variables
+        global HUMAN_MARKER
+        global AI_MARKER
+
         # Choosing a marker for a player
-        global human_marker
-        global AI_marker
-        human_marker, AI_marker = human_marker_selection()
+        HUMAN_MARKER, AI_MARKER = human__selection()
 
         # Determining who goes first
         turn = choose_first()
-        print(f'\n{turn} will go first\n')
+        print(f'\n{turn} will go first\n\n')
 
-        play_game = input("Ready to play the game? Y or N?")
+        play_game = input("Ready to play the game? Y or N?: ")
 
         if play_game.lower()[0] == 'y':
             game_on = True
@@ -192,12 +182,12 @@ def main():
                 position = human_choice(the_board)
 
                 # Place the marker
-                place_marker(the_board, human_marker, position)
+                place_marker(the_board, HUMAN_MARKER, position)
 
                 # Checking to see if human has own
-                if win_check(the_board, human_marker):
+                if win_check(the_board, HUMAN_MARKER):
                     display_baord(the_board)
-                    print(f'Congratulations! {turn}  wins!')
+                    print(f'Congratulations! {turn} wins!')
                     game_on = False
                 else:
                     # Checking for a tie
@@ -205,8 +195,7 @@ def main():
                         display_baord(the_board)
                         print("TIE GAME!")
                         break
-                    else:
-                        turn = 'AI'
+                    turn = 'AI'
             else:
                 # AI turn
                 display_baord(the_board)
@@ -214,22 +203,21 @@ def main():
                 # Stratigically place the AI position
                 position = ai_choice(the_board)
 
-                place_marker(the_board, AI_marker, position)
+                place_marker(the_board, AI_MARKER, position)
                 time.sleep(1)
 
                 # Checking to see if AI has own
-                if win_check(the_board, AI_marker):
+                if win_check(the_board, AI_MARKER):
                     display_baord(the_board)
                     print(f'Congratulation! {turn} wins!!')
                     break
-                else:
+
                     # Checking for a tie
-                    if full_board_check(the_board):
-                        display_baord(the_board)
-                        print("TIE GAME!")
-                        break
-                    else:
-                        turn = 'Human'
+                if full_board_check(the_board):
+                    display_baord(the_board)
+                    print("TIE GAME!")
+                    break
+                turn = 'Human'
 
         if not replay():
             break
@@ -237,3 +225,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
